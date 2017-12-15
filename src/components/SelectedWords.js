@@ -9,22 +9,32 @@ export class SelectedWords extends PureComponent {
         return (
             <div>
                 {words.map((map, word) => (
-                    <div>
+                    <div key={word}>
                         <EditText 
-                            key={word} 
                             text={map.get('editedWord')}
                             edit={map.get('edit')}
                             onEdit={() => editWord(word)}
                             onSave={edited => saveEditedWord(word, edited)} />
                         <div>
-                            {map.get('matches').map(m => (
-                                <p>{m}</p>
+                            {map.get('sentences').map((m, idx) => (
+                                <p key={idx}>{m}</p>
                             ))}
                         </div>
                     </div>
                 )).toArray()}
+
+                <button onClick={this.download.bind(this)}>Download</button>
             </div>
         )
+    }
+
+    download() {
+        const text = 'Text\tto download\r\nNewLine'
+        const element = document.createElement('a')
+        const file = new Blob([text], {type: 'text/plain'})
+        element.href = URL.createObjectURL(file)
+        element.download = 'myFile.txt'
+        element.click()
     }
 }
 

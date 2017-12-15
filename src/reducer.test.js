@@ -20,9 +20,18 @@ describe('reducer', () => {
             
             expect(nextState).toEqual(fromJS({
                 words: {
-                    word1: { selected: false },
-                    word2: { selected: false },
-                    word3: { selected: false },
+                    word1: { 
+                        selected: false,
+                        sentences: ['lorem ipsum word1', 'lorem ipsum dolor word1']
+                    },
+                    word2: { 
+                        selected: false,
+                        sentences: ['lorem word2']
+                    },
+                    word3: { 
+                        selected: false,
+                        sentences: ['ipsum word3']
+                    },
                 },
                 selectionConfirmed: false
             }))
@@ -30,9 +39,17 @@ describe('reducer', () => {
     
         it('resets existing state correctly', () => {
             const existingState = fromJS({
-                words: {
-                    oldWord1: { selected: true },
-                    oldWord2: { selected: false }
+                selectedWords: {
+                    oldWord1: { 
+                        editedWord: 'oldWord1', 
+                        edit: false, 
+                        sentences: ['sentence with oldWord1'] 
+                    },
+                    oldWord2: { 
+                        ditedWord: 'oldWord2', 
+                        edit: false, 
+                        sentences: ['sentence with oldWord2'] 
+                    }
                 },
                 selectionConfirmed: true
             })
@@ -49,9 +66,18 @@ describe('reducer', () => {
     
             expect(nextState).toEqual(fromJS({
                 words: {
-                    newWord1: { selected: false },
-                    newWord2: { selected: false },
-                    newWord3: { selected: false },
+                    newWord1: { 
+                        selected: false,
+                        sentences: ['lorem ipsum newWord1', 'lorem ipsum dolor newWord1']
+                    },
+                    newWord2: { 
+                        selected: false,
+                        sentences: ['lorem newWord2']
+                    },
+                    newWord3: { 
+                        selected: false,
+                        sentences: ['ipsum newWord3']
+                    },
                 },
                 selectionConfirmed: false
             }))

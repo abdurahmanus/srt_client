@@ -22,8 +22,10 @@ export class Upload extends Component {
 
     onDrop(acceptedFiles, rejectedFiles) {
         if (acceptedFiles && acceptedFiles[0]) {
-            const url = "http://localhost:3005/upload"
-            const req = request.post(url).withCredentials()
+            const url = process.env.REACT_APP_API_URL
+            const req = request
+                .post(url)
+                .withCredentials()
             req.attach("srt", acceptedFiles[0])
             req.then(
                 res => this.props.setParseResults(JSON.parse(res.text)),

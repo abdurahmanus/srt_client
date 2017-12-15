@@ -1,5 +1,4 @@
 import React from 'react'
-import ReactDOM from 'react-dom'
 import { renderIntoDocument, scryRenderedDOMComponentsWithClass } from 'react-dom/test-utils'
 import { EditText } from './EditText'
 

@@ -10,13 +10,13 @@ import SelectWord from './SelectWord'
 describe('SelectWord', () => {
     
     it('invokes onToggle when checkbox changed', () => {
-        let toggleInvoked = false
+        const toggleCallback = jest.fn()
         const component = renderIntoDocument(
-            <SelectWord onToggle={() => toggleInvoked = true} />
+            <SelectWord onToggle={toggleCallback} />
         )
         Simulate.change(ReactDOM.findDOMNode(component.refs.checkbox))
 
-        expect(toggleInvoked).toEqual(true)
+        expect(toggleCallback).toBeCalled()
     })
 
     it('renders correct word', () => {

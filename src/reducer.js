@@ -10,7 +10,7 @@ function setParseResults(state, newResults) {
     
     const words = newResults.words.reduce((acc, word) => ({
         ...acc,
-        [word]: { selected: false, matches: matches[word] }
+        [word]: { selected: false, sentences: matches[word] }
     }), {})
     
     const newState = fromJS({ words, selectionConfirmed: false })
@@ -33,7 +33,7 @@ function selectWords(state) {
                 .map((map, word) => Map({ 
                     editedWord: word, 
                     edit: false, 
-                    matches: map.get('matches') 
+                    sentences: map.get('sentences') 
                 }))
         )
         .remove('words')

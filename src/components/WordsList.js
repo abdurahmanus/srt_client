@@ -11,10 +11,10 @@ export class WordsList extends PureComponent {
                 {!!words.size && <button onClick={ selectWords }>Next</button>}
                 {words.map((val, word) => (
                     <SelectWord
-                    key={word}
-                    word={word}
-                    selected={val.get('selected')}
-                    onToggle={e => toggleSelectWord(word)} />
+                        key={word}
+                        word={word}
+                        selected={val.get('selected')}
+                        onToggle={e => toggleSelectWord(word)} />
                 )).toArray()}
             </div>
         )
