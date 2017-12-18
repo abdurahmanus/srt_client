@@ -5,22 +5,21 @@ import { connect } from 'react-redux'
 import * as actionCreators from '../action-creators'
 
 export class Upload extends Component {
-    constructor(props) {
-        super(props)
-        this.onDrop = this.onDrop.bind(this)
-    }
-
     render() {
         return (
             <div>
-                <Dropzone name="srt" accept=".srt" multiple={false} onDrop={this.onDrop}>
+                <Dropzone 
+                    name="srt" 
+                    accept=".srt" 
+                    multiple={false} 
+                    onDrop={this.dropHandler.bind(this)}>
                     Drop .srt file here
                 </Dropzone>
             </div>
         )
     }
 
-    onDrop(acceptedFiles, rejectedFiles) {
+    dropHandler(acceptedFiles, rejectedFiles) {
         if (acceptedFiles && acceptedFiles[0]) {
             const url = process.env.REACT_APP_API_URL
             const req = request
