@@ -21,11 +21,9 @@ export class WordsList extends PureComponent {
     }
 }
 
-function mapStateToProps(state) {
-    return {
-        words: state.get('words')
-    }
-}
+const mapStateToProps = (state) => ({
+    words: state.get('words')
+})
 
 export const WordsListContainer = connect(
     mapStateToProps,
