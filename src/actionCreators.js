@@ -2,12 +2,12 @@ import * as actions from './actions'
 import request from 'superagent'
 import debounce from 'lodash/debounce'
 
-export const setParseResults = results => ({
+export const setParseResults = (results) => ({
     type: actions.SET_PARSE_RESULTS,
     results
 })
 
-export const toggleSelectWord = word => ({
+export const toggleSelectWord = (word) => ({
     type: actions.TOGGLE_SELECT_WORD,
     word
 })

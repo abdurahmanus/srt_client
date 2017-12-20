@@ -19,7 +19,11 @@ const configureStore = () => {
     )
 
     const persistedState = fromJS(loadState())
-    const store = createStore(reducer, persistedState, enhancer)
+    const store = createStore(
+        reducer, 
+        persistedState, 
+        enhancer
+    )
     
     store.subscribe(throttle(() => {
         saveState(store.getState())

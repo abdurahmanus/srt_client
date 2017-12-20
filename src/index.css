@@ -3,3 +3,23 @@ body {
   padding: 10px;
   font-family: sans-serif;
 }
+
+textarea {
+  width: 100%;
+  box-sizing: border-box;
+  border-color: rgb(255, 225, 230);
+}
+
+table {
+  margin-top: 20px;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+table, th, td {
+  border: 1px dashed lightblue;
+}
+
+td {
+  vertical-align: top;
+}
