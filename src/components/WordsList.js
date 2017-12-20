@@ -1,25 +1,21 @@
-import React, { PureComponent } from 'react'
+import React from 'react'
 import { connect } from 'react-redux'
 import SelectWord from './SelectWord'
-import * as actionCreators from '../actionCreators'
+import { toggleSelectWord, selectWordsAndFetchTranslations } from '../actionCreators'
 
-export class WordsList extends PureComponent {
-    render() {
-        const { words, toggleSelectWord, selectWordsAndFetchTranslations } = this.props
-        return (
-            <div>
-                {words.map((val, word) => (
-                    <SelectWord
-                        key={word}
-                        word={word}
-                        selected={val.get('selected')}
-                        onToggle={e => toggleSelectWord(word)} />
-                )).toArray()}
-                {!!words.size && <button onClick={ selectWordsAndFetchTranslations }>Next -></button>}
-            </div>
-        )
-    }
-}
+// todo: map immutable words Map to pure js array of objects via so-called Selector
+export const WordsList = ({words, onToggle, onConfirmSelection}) => (
+    <div>
+        {words.map((wordData, word) => (
+            <SelectWord
+                key={word}
+                word={word}
+                selected={wordData.get('selected')}
+                onToggle={() => onToggle(word)} />
+        )).toArray()}
+        {!!words.size && <button onClick={ onConfirmSelection }>Next -></button>}
+    </div>
+)
 
 const mapStateToProps = (state) => ({
     words: state.get('words')
@@ -27,5 +23,8 @@ const mapStateToProps = (state) => ({
 
 export const WordsListContainer = connect(
     mapStateToProps,
-    actionCreators
+    {
+        onToggle: toggleSelectWord,
+        onConfirmSelection: selectWordsAndFetchTranslations
+    }
 )(WordsList)
