@@ -1,14 +1,13 @@
 import React, { PureComponent } from 'react'
 import { connect } from 'react-redux'
 import SelectWord from './SelectWord'
-import * as actionCreators from '../action-creators'
+import * as actionCreators from '../actionCreators'
 
 export class WordsList extends PureComponent {
     render() {
-        const { words, toggleSelectWord, selectWords } = this.props
+        const { words, toggleSelectWord, selectWordsAndFetchTranslations } = this.props
         return (
             <div>
-                {!!words.size && <button onClick={ selectWords }>Next</button>}
                 {words.map((val, word) => (
                     <SelectWord
                         key={word}
@@ -16,6 +15,7 @@ export class WordsList extends PureComponent {
                         selected={val.get('selected')}
                         onToggle={e => toggleSelectWord(word)} />
                 )).toArray()}
+                {!!words.size && <button onClick={ selectWordsAndFetchTranslations }>Next -></button>}
             </div>
         )
     }

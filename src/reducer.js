@@ -3,14 +3,14 @@ import * as actions from './actions'
 
 function setParseResults(state, newResults) {    
     
-    const matches = newResults.matches.reduce((acc, m) => ({
+    const sentences = newResults.matches.reduce((acc, m) => ({
         ...acc,
-        [m.word]: m.sentences
+        [m.word]: m.sentences.join('\n')
     }), {})
     
-    const words = newResults.words.reduce((acc, word) => ({
+    const words = newResults.words.sort().reduce((acc, word) => ({
         ...acc,
-        [word]: { selected: false, sentences: matches[word] }
+        [word]: { selected: false, sentences: sentences[word] }
     }), {})
     
     const newState = fromJS({ words, selectionConfirmed: false })
@@ -31,28 +31,62 @@ function selectWords(state) {
                 .get('words')
                 .filter(m => m.get('selected'))
                 .map((map, word) => Map({ 
-                    editedWord: word, 
-                    edit: false, 
-                    sentences: map.get('sentences') 
+                    word: word, 
+                    sentences: map.get('sentences'),
+                    transLoading: false,
+                    transLoaded: false
                 }))
         )
         .remove('words')
 }
 
-function editWord(state, word) {
+function editWord(state, word, newWord) {
     return state.updateIn(
-        ['selectedWords', word, 'edit'], 
-        () => true
+        ['selectedWords', word, 'word'], 
+        () => newWord
     )
 }
 
-function saveEditedWord(state, word, editedWord) {
+function editTranslation(state, word, newTranslation) {
     return state.updateIn(
-        ['selectedWords', word], 
-        map => map.merge({
-            editedWord: editedWord,
-            edit: false
-        }) 
+        ['selectedWords', word, 'translation'], 
+        () => newTranslation
+    )
+}
+
+function editTranscription(state, word, newTranscription) {
+    return state.updateIn(
+        ['selectedWords', word, 'transcription'], 
+        () => newTranscription
+    )
+}
+
+function editSentences(state, word, newSentences) {
+    return state.updateIn(
+        ['selectedWords', word, 'sentences'], 
+        () => newSentences
+    )
+}
+
+function requestTranslation(state, word) {
+    return state.updateIn(
+        ['selectedWords', word],
+        wordData => wordData.merge({
+            transLoading: true,
+            transLoaded: false
+        })
+    )
+}
+
+function receiveTranslation(state, word, translation, transcription) {
+    return state.updateIn(
+        ['selectedWords', word],
+        wordData => wordData.merge({
+            translation: translation || '',
+            transcription: transcription || '',
+            transLoading: false,
+            transLoaded: true
+        })
     )
 }
 
@@ -68,9 +102,17 @@ export default function reducer(state = Map({
         case actions.SELECT_WORDS:
             return selectWords(state)
         case actions.EDIT_WORD:
-            return editWord(state, action.word)
-        case actions.SAVE_EDITED_WORD:
-            return saveEditedWord(state, action.word, action.editedWord)
+            return editWord(state, action.word, action.newWord)
+        case actions.EDIT_TRANSLATION:
+            return editTranslation(state, action.word, action.newTranslation)
+        case actions.EDIT_TRANSCRIPTION:
+            return editTranscription(state, action.word, action.newTranscription)
+        case actions.EDIT_SENTENCES:
+            return editSentences(state, action.word, action.newSentences)
+        case actions.REQUEST_TRANSLATION:
+            return requestTranslation(state, action.word)
+        case actions.RECEIVE_TRANSLATION:
+            return receiveTranslation(state, action.word, action.translation, action.transcription)
         default:
             return state
     }

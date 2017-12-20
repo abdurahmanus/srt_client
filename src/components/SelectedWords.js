@@ -1,27 +1,31 @@
 import React, { PureComponent } from 'react'
 import { connect } from 'react-redux'
-import { EditText } from './EditText'
-import * as actionCreators from '../action-creators'
+import { WordToExportContainer } from './WordToExport'
+import * as actionCreators from '../actionCreators'
 
 export class SelectedWords extends PureComponent {
     render() {
-        const { words, editWord, saveEditedWord } = this.props 
+        const { words } = this.props 
         return (
             <div>
-                {words.map((map, word) => (
-                    <div key={word}>
-                        <EditText 
-                            text={map.get('editedWord')}
-                            edit={map.get('edit')}
-                            onEdit={() => editWord(word)}
-                            onSave={edited => saveEditedWord(word, edited)} />
-                        <div>
-                            {map.get('sentences').map((m, idx) => (
-                                <p key={idx}>{m}</p>
-                            ))}
-                        </div>
-                    </div>
-                )).toArray()}
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Слово</th>
+                            <th>Перевод</th>
+                            <th>Транскрипция</th>
+                            <th>Предложения</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {words.map((wordData, word) => (
+                            <WordToExportContainer
+                                key={word} 
+                                word={word}
+                                wordData={wordData} />
+                        )).toArray()}
+                    </tbody>
+                </table>
 
                 <button onClick={this.download.bind(this)}>Download</button>
             </div>
@@ -29,11 +33,13 @@ export class SelectedWords extends PureComponent {
     }
 
     download() {
-        const text = 'Text\tto download\r\nNewLine'
+        const text = this.props.words.map(wd => 
+            `${wd.get('word')}\t${wd.get('translation')}\t${wd.get('transcription')}\t${wd.get('sentences')}`
+        ).toArray().join('\r\n')
         const element = document.createElement('a')
         const file = new Blob([text], {type: 'text/plain'})
         element.href = URL.createObjectURL(file)
-        element.download = 'myFile.txt'
+        element.download = 'result.txt'
         element.click()
     }
 }

@@ -6,8 +6,7 @@ export default class SelectWord extends PureComponent {
         return (
             <div>
                 <label style={{
-                    color: selected ? "green" : "gray",
-                    fontWeight: selected ? "bold" : "normal"
+                    color: selected ? "green" : "gray"
                 }}>
                     <input
                         ref="checkbox"

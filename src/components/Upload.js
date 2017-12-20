@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import Dropzone from 'react-dropzone'
 import request from 'superagent'
 import { connect } from 'react-redux'
-import * as actionCreators from '../action-creators'
+import * as actionCreators from '../actionCreators'
 
 export class Upload extends Component {
     render() {
@@ -21,7 +21,7 @@ export class Upload extends Component {
 
     dropHandler(acceptedFiles, rejectedFiles) {
         if (acceptedFiles && acceptedFiles[0]) {
-            const url = process.env.REACT_APP_API_URL
+            const url = `${process.env.REACT_APP_API_URL}/upload`
             const req = request
                 .post(url)
                 .withCredentials()
