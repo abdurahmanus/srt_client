@@ -1,5 +1,6 @@
 import { Map, fromJS } from 'immutable'
 import * as actions from '../actions'
+import word from './word'
 
 // todo: refactor (split to several reducers)
 function setParseResults(state, newResults) {    
@@ -42,50 +43,6 @@ const selectWords = (state) =>
     )
     .remove('words')
 
-const editWord = (state, word, newWord) => 
-    state.updateIn(
-        ['selectedWords', word, 'word'], 
-        () => newWord
-    )
-
-const editTranslation = (state, word, newTranslation) => 
-    state.updateIn(
-        ['selectedWords', word, 'translation'], 
-        () => newTranslation
-    )
-
-const editTranscription = (state, word, newTranscription) => 
-    state.updateIn(
-        ['selectedWords', word, 'transcription'], 
-        () => newTranscription
-    )
-
-const editSentences = (state, word, newSentences) => 
-    state.updateIn(
-        ['selectedWords', word, 'sentences'], 
-        () => newSentences
-    )
-
-const requestTranslation = (state, word) =>
-    state.updateIn(
-        ['selectedWords', word],
-        wordData => wordData.merge(fromJS({
-            transLoading: true,
-            transLoaded: false
-        }))
-    )
-
-const receiveTranslation = (state, word, translation, transcription) =>
-    state.updateIn(
-        ['selectedWords', word],
-        wordData => wordData.merge(fromJS({
-            translation: translation || '',
-            transcription: transcription || '',
-            transLoading: false,
-            transLoaded: true
-        }))
-    )
-
 export default function reducer(
     state = Map({
         words: Map(),
@@ -101,17 +58,15 @@ export default function reducer(
         case actions.SELECT_WORDS:
             return selectWords(state)
         case actions.EDIT_WORD:
-            return editWord(state, action.word, action.newWord)
         case actions.EDIT_TRANSLATION:
-            return editTranslation(state, action.word, action.newTranslation)
         case actions.EDIT_TRANSCRIPTION:
-            return editTranscription(state, action.word, action.newTranscription)
         case actions.EDIT_SENTENCES:
-            return editSentences(state, action.word, action.newSentences)
         case actions.REQUEST_TRANSLATION:
-            return requestTranslation(state, action.word)
         case actions.RECEIVE_TRANSLATION:
-            return receiveTranslation(state, action.word, action.translation, action.transcription)
+            return state.updateIn(
+                ['selectedWords', action.word],
+                w => word(w, action)
+            )
         default:
             return state
     }
