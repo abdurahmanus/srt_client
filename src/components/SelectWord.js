@@ -13,7 +13,7 @@ export default class SelectWord extends PureComponent {
                         className="toggle"
                         type="checkbox"
                         checked={selected}
-                        onChange={onToggle} /> {word}
+                        onChange={e => onToggle(word)} /> {word}
                 </label>
             </div>
         )

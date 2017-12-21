@@ -1,7 +1,6 @@
 import React, { PureComponent } from 'react'
 import { connect } from 'react-redux'
 import { WordToExportContainer } from './WordToExport'
-import * as actionCreators from '../actionCreators'
 
 export class SelectedWords extends PureComponent {
     render() {
@@ -47,6 +46,5 @@ export class SelectedWords extends PureComponent {
 export const SelectedWordsContainer = connect(
     state => ({
         words: state.get('selectedWords')
-    }),
-    actionCreators
+    })
 )(SelectedWords)

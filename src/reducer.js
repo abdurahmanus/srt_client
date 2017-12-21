@@ -1,6 +1,7 @@
 import { Map, fromJS } from 'immutable'
 import * as actions from './actions'
 
+// todo: refactor (split to several reducers)
 function setParseResults(state, newResults) {    
     
     const sentences = newResults.matches.reduce((acc, m) => ({
@@ -19,81 +20,79 @@ function setParseResults(state, newResults) {
         .remove('selectedWords')
 }
 
-function toggleSelectWord(state, word) {
-    return state.updateIn(['words', word, 'selected'], selected => !selected)
-}
+const toggleSelectWord = (state, word) => 
+    state.updateIn(
+        ['words', word, 'selected'], 
+        selected => !selected
+    )
 
-function selectWords(state) {
-    return state
-        .set('selectionConfirmed', true)
-        .set('selectedWords', 
-            state
-                .get('words')
-                .filter(m => m.get('selected'))
-                .map((map, word) => Map({ 
-                    word: word, 
-                    sentences: map.get('sentences'),
-                    transLoading: false,
-                    transLoaded: false
-                }))
-        )
-        .remove('words')
-}
+const selectWords = (state) => 
+    state
+    .set('selectionConfirmed', true)
+    .set('selectedWords', 
+        state
+            .get('words')
+            .filter(m => m.get('selected'))
+            .map((map, word) => Map({ 
+                word: word, 
+                sentences: map.get('sentences'),
+                transLoading: false,
+                transLoaded: false
+            }))
+    )
+    .remove('words')
 
-function editWord(state, word, newWord) {
-    return state.updateIn(
+const editWord = (state, word, newWord) => 
+    state.updateIn(
         ['selectedWords', word, 'word'], 
         () => newWord
     )
-}
 
-function editTranslation(state, word, newTranslation) {
-    return state.updateIn(
+const editTranslation = (state, word, newTranslation) => 
+    state.updateIn(
         ['selectedWords', word, 'translation'], 
         () => newTranslation
     )
-}
 
-function editTranscription(state, word, newTranscription) {
-    return state.updateIn(
+const editTranscription = (state, word, newTranscription) => 
+    state.updateIn(
         ['selectedWords', word, 'transcription'], 
         () => newTranscription
     )
-}
 
-function editSentences(state, word, newSentences) {
-    return state.updateIn(
+const editSentences = (state, word, newSentences) => 
+    state.updateIn(
         ['selectedWords', word, 'sentences'], 
         () => newSentences
     )
-}
 
-function requestTranslation(state, word) {
-    return state.updateIn(
+const requestTranslation = (state, word) =>
+    state.updateIn(
         ['selectedWords', word],
-        wordData => wordData.merge({
+        wordData => wordData.merge(fromJS({
             transLoading: true,
             transLoaded: false
-        })
+        }))
     )
-}
 
-function receiveTranslation(state, word, translation, transcription) {
-    return state.updateIn(
+const receiveTranslation = (state, word, translation, transcription) =>
+    state.updateIn(
         ['selectedWords', word],
-        wordData => wordData.merge({
+        wordData => wordData.merge(fromJS({
             translation: translation || '',
             transcription: transcription || '',
             transLoading: false,
             transLoaded: true
-        })
+        }))
     )
-}
 
-export default function reducer(state = Map({
-    words: Map(),
-    selectionConfirmed: false
-}), action) {
+export default function reducer(
+    state = Map({
+        words: Map(),
+        selectionConfirmed: false
+    }), 
+    action) {
+    
     switch(action.type) {
         case actions.SET_PARSE_RESULTS:
             return setParseResults(state, action.results)
