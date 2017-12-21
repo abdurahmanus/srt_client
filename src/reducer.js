@@ -116,3 +116,10 @@ export default function reducer(
             return state
     }
 }
+
+// selectors
+export const getWords = (state) => 
+    state.get('words').entrySeq()
+
+export const getSelectedWords = (state) =>
+    state.get('selectedWords').entrySeq()

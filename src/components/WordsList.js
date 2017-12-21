@@ -2,19 +2,20 @@ import React, { PureComponent } from 'react'
 import { connect } from 'react-redux'
 import SelectWord from './SelectWord'
 import { toggleSelectWord, selectWordsAndFetchTranslations } from '../actionCreators'
+import { getWords } from '../reducer'
 
 export class WordsList extends PureComponent {
     render() {
         const { words, onToggle, onConfirmSelection } = this.props
         return (
             <div>
-                {words.map((wordData, word) => (
+                {words.map(([word, wordData]) => (
                     <SelectWord
                         key={word}
                         word={word}
                         selected={wordData.get('selected')}
                         onToggle={onToggle} />
-                )).toArray()}
+                ))}
                 {!!words.size && <button onClick={onConfirmSelection}>Next -></button>}
             </div>
         )
@@ -22,7 +23,7 @@ export class WordsList extends PureComponent {
 }
 
 const mapStateToProps = (state) => ({
-    words: state.get('words')
+    words: getWords(state)
 })
 
 export const WordsListContainer = connect(
