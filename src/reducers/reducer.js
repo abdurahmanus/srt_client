@@ -1,5 +1,5 @@
 import { Map, fromJS } from 'immutable'
-import * as actions from './actions'
+import * as actions from '../actions'
 
 // todo: refactor (split to several reducers)
 function setParseResults(state, newResults) {    
