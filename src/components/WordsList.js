@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react'
 import { connect } from 'react-redux'
 import SelectWord from './SelectWord'
 import { toggleSelectWord, selectWordsAndFetchTranslations } from '../actionCreators'
-import { getWords } from '../reducers/reducer'
+import { getWords } from '../reducers'
 
 export class WordsList extends PureComponent {
     render() {

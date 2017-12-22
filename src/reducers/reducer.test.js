@@ -1,5 +1,5 @@
 import { fromJS } from 'immutable'
-import reducer from './reducer'
+import reducer from './index'
 import { setParseResults, toggleSelectWord, selectWords, editWord } from '../actionCreators'
 
 describe('reducer', () => {

@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react'
 import { connect } from 'react-redux'
 import { WordToExportContainer } from './WordToExport'
-import { getSelectedWords } from '../reducers/reducer'
+import { getSelectedWords } from '../reducers'
 import { Download } from './Download'
 
 export class SelectedWords extends PureComponent {

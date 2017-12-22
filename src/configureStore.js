@@ -2,7 +2,7 @@ import { createStore, applyMiddleware, compose } from 'redux'
 import thunk from 'redux-thunk'
 import { fromJS } from 'immutable'
 import throttle from 'lodash/throttle'
-import reducer from './reducers/reducer'
+import reducer from './reducers'
 import { loadState, saveState } from './localStorage'
 
 const configureStore = () => {
