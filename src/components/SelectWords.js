@@ -4,7 +4,7 @@ import SelectWord from './SelectWord'
 import { toggleSelectWord, selectWordsAndFetchTranslations } from '../actionCreators'
 import { getWords } from '../reducers'
 
-export class WordsList extends PureComponent {
+export class SelectWords extends PureComponent {
     render() {
         const { words, onToggle, onConfirmSelection } = this.props
         return (
@@ -26,10 +26,10 @@ const mapStateToProps = (state) => ({
     words: getWords(state)
 })
 
-export const WordsListContainer = connect(
+export const SelectWordsContainer = connect(
     mapStateToProps,
     {
         onToggle: toggleSelectWord, 
         onConfirmSelection: selectWordsAndFetchTranslations
     }
-)(WordsList)
+)(SelectWords)
