@@ -1,10 +1,15 @@
-import React, { Component } from 'react'
+import React, { PureComponent } from 'react'
 import Dropzone from 'react-dropzone'
-import request from 'superagent'
 import { connect } from 'react-redux'
-import * as actionCreators from '../actionCreators'
+import { setParseResults } from '../actionCreators'
+import { uploadSrt } from '../api'
 
-export class Upload extends Component {
+export class Upload extends PureComponent {
+    constructor() {
+        super()
+        this.dropHandler = this.dropHandler.bind(this)
+    }
+    
     render() {
         return (
             <div>
@@ -12,7 +17,7 @@ export class Upload extends Component {
                     name="srt" 
                     accept=".srt" 
                     multiple={false} 
-                    onDrop={this.dropHandler.bind(this)}>
+                    onDrop={this.dropHandler}>
                     Drop .srt file here
                 </Dropzone>
             </div>
@@ -21,20 +26,18 @@ export class Upload extends Component {
 
     dropHandler(acceptedFiles, rejectedFiles) {
         if (acceptedFiles && acceptedFiles[0]) {
-            const url = `${process.env.REACT_APP_API_URL}/upload`
-            const req = request
-                .post(url)
-                .withCredentials()
-            req.attach("srt", acceptedFiles[0])
-            req.then(
-                res => this.props.setParseResults(JSON.parse(res.text)),
-                err => console.log(err)
-            )
+            uploadSrt(acceptedFiles[0])
+                .then(
+                    res => this.props.onUpload(res),
+                    err => console.log(err)
+                )
         }
     }
 }
 
 export const UploadContainer = connect(
     null,
-    actionCreators
+    {
+        onUpload: setParseResults
+    }
 )(Upload)

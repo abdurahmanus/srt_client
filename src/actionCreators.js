@@ -1,6 +1,6 @@
 import * as actions from './actions'
-import request from 'superagent'
 import debounce from 'lodash/debounce'
+import { translate } from './api'
 
 export const setParseResults = (results) => ({
     type: actions.SET_PARSE_RESULTS,
@@ -52,26 +52,21 @@ export const editSentences = (word, newSentences) => ({
     newSentences
 })
 
-const requestTranslation = (word) => ({
-    type: actions.REQUEST_TRANSLATION,
-    word
-})
-
-const receiveTranslation = (word, translationResult) => ({
-    type: actions.RECEIVE_TRANSLATION,
-    word,
-    translation: translationResult.translation,
-    transcription: translationResult.transcription
-})
-
 // todo: refactor this
 // maybe use this: https://github.com/ryanseddon/redux-debounced
 const innerFetch = (originalWord, word, dispatch) => {
-    dispatch(requestTranslation(originalWord))
+    dispatch({
+        type: actions.REQUEST_TRANSLATION,
+        word: originalWord
+    })
 
-    const url = `${process.env.REACT_APP_API_URL}/translate/${word}`
-    return request.get(url).withCredentials().then(
-        res => dispatch(receiveTranslation(originalWord, JSON.parse(res.text))),
+    translate(word).then(
+        ({translation, transcription}) => dispatch({
+            type: actions.RECEIVE_TRANSLATION,
+            word: originalWord,
+            translation,
+            transcription
+        }),
         err => console.log(err)
     )
 }
